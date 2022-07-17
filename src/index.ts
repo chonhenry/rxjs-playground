@@ -1,10 +1,21 @@
-import { Observable } from 'rxjs';
+import { Observable, from } from "rxjs";
 
-const someObservable$ = new Observable<string>(subscriber => {
-  subscriber.next('Alice');
-  subscriber.next('Ben');
-  subscriber.next('Charlie');
-  subscriber.complete();
+from(["Alice", "Ben", "Charlie"]).subscribe({
+  next: (value) => console.log(value),
+  complete: () => console.log("completed"),
 });
 
-someObservable$.subscribe(value => console.log(value));
+const somePromise = new Promise((resolve, reject) => {
+  const isResolved = true;
+
+  if (isResolved) resolve("Resolved");
+  reject("Rejected");
+});
+
+const observableFromPromise$ = from(somePromise);
+
+observableFromPromise$.subscribe({
+  next: (value) => console.log(value),
+  error: (err) => console.error(err),
+  complete: () => console.log("completed"),
+});
