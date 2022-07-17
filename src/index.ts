@@ -1,10 +1,21 @@
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 
-const someObservable$ = new Observable<string>(subscriber => {
-  subscriber.next('Alice');
-  subscriber.next('Ben');
-  subscriber.next('Charlie');
-  subscriber.complete();
+const intervale$ = new Observable<number>((subscriber) => {
+  let counter = 1;
+
+  const intervalId = setInterval(() => {
+    console.log("Emmited", counter);
+    subscriber.next(counter++);
+  }, 2000);
+
+  return () => {
+    clearInterval(intervalId);
+  };
 });
 
-someObservable$.subscribe(value => console.log(value));
+const subscription = intervale$.subscribe((value) => console.log(value));
+
+setTimeout(() => {
+  console.log("unsubscribe");
+  subscription.unsubscribe();
+}, 7000);
