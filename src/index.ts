@@ -1,10 +1,9 @@
-import { Observable } from 'rxjs';
+import { filter, Observable, of, map, tap } from "rxjs";
 
-const someObservable$ = new Observable<string>(subscriber => {
-  subscriber.next('Alice');
-  subscriber.next('Ben');
-  subscriber.next('Charlie');
-  subscriber.complete();
-});
-
-someObservable$.subscribe(value => console.log(value));
+of(1, 7, 3, 6, 2)
+  .pipe(
+    filter((value) => value > 5),
+    map((value) => value * 2),
+    tap((value) => console.log("Spy:", value))
+  )
+  .subscribe((value) => console.log("Output:", value));
